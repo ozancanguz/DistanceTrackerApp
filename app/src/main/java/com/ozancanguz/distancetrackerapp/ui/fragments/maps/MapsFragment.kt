@@ -5,9 +5,11 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ozancanguz.distancetrackerapp.R
 import com.ozancanguz.distancetrackerapp.databinding.FragmentMapsBinding
+import com.ozancanguz.distancetrackerapp.utils.Constants.GO
+
 import com.ozancanguz.distancetrackerapp.utils.Extension.disable
 import com.ozancanguz.distancetrackerapp.utils.Extension.hide
 import com.ozancanguz.distancetrackerapp.utils.Extension.show
@@ -90,7 +94,7 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
     }
     private fun onStartButtonClicked() {
         if (hasBackgroundLocationPermission(requireContext())) {
-         //   startCountDown()
+           startCountDown()
             binding.startButton.disable()
             binding.startButton.hide()
             binding.stopButton.show()
@@ -99,6 +103,37 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
         }
     }
 
+    private fun startCountDown() {
+        binding.timerTextView.show()
+        binding.stopButton.disable()
+        val timer: CountDownTimer = object : CountDownTimer(4000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val currentSecond = millisUntilFinished / 1000
+                if (currentSecond.toString() == "0") {
+                    binding.timerTextView.text = GO
+                    binding.timerTextView.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black
+                        )
+                    )
+                } else {
+                    binding.timerTextView.text = currentSecond.toString()
+                    binding.timerTextView.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
+                    )
+                }
+            }
+
+            override fun onFinish() {
+                binding.timerTextView.hide()
+            }
+        }
+        timer.start()
+    }
 
 
     override fun onRequestPermissionsResult(
