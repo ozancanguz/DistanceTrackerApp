@@ -1,6 +1,7 @@
 package com.ozancanguz.distancetrackerapp.ui.fragments.maps
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -88,4 +89,7 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
         }
         return false
     }
+
+
+
 }
