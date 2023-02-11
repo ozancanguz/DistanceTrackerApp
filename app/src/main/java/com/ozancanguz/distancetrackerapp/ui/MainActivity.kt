@@ -6,7 +6,9 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.ozancanguz.distancetrackerapp.R
 import com.ozancanguz.distancetrackerapp.utils.Permissions.hasLocationPermission
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
