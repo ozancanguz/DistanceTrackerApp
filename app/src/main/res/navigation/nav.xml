@@ -12,24 +12,16 @@
         tools:layout="@layout/fragment_permission" >
         <action
             android:id="@+id/action_permissionFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/mapsFragment"
-        android:name="com.ozancanguz.distancetrackerapp.ui.fragments.maps.MapsFragment"
-        android:label="Maps "
-        tools:layout="@layout/fragment_maps" >
-        <action
-            android:id="@+id/action_mapsFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
+            app:destination="@id/mapsFragment2" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.ozancanguz.distancetrackerapp.ui.fragments.result.ResultFragment"
         android:label="Result Screen"
-        tools:layout="@layout/fragment_result" >
-        <action
-            android:id="@+id/action_resultFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_result" />
+    <fragment
+        android:id="@+id/mapsFragment2"
+        android:name="com.ozancanguz.distancetrackerapp.ui.fragments.maps.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>
