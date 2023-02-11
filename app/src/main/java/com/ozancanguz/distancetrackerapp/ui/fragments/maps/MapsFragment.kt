@@ -18,12 +18,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ozancanguz.distancetrackerapp.R
 import com.ozancanguz.distancetrackerapp.databinding.FragmentMapsBinding
+import com.ozancanguz.distancetrackerapp.utils.Extension.disable
 import com.ozancanguz.distancetrackerapp.utils.Extension.hide
 import com.ozancanguz.distancetrackerapp.utils.Extension.show
+import com.ozancanguz.distancetrackerapp.utils.Permissions.hasBackgroundLocationPermission
+import com.ozancanguz.distancetrackerapp.utils.Permissions.requestBackgroundLocationPermission
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener{
+class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener,EasyPermissions.PermissionCallbacks{
       private var _binding: FragmentMapsBinding? = null
 
     private val binding get() = _binding!!
@@ -44,6 +49,8 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
 
         binding.startButton.setOnClickListener {
 
+            onStartButtonClicked()
+
         }
         binding.stopButton.setOnClickListener {
 
@@ -55,6 +62,8 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
         return view
 
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,6 +87,39 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
 
         }
 
+    }
+    private fun onStartButtonClicked() {
+        if (hasBackgroundLocationPermission(requireContext())) {
+         //   startCountDown()
+            binding.startButton.disable()
+            binding.startButton.hide()
+            binding.stopButton.show()
+        } else {
+            requestBackgroundLocationPermission(this)
+        }
+    }
+
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            SettingsDialog.Builder(requireActivity()).build().show()
+        } else {
+            requestBackgroundLocationPermission(this)
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        onStartButtonClicked()
     }
 
     override fun onMyLocationButtonClick(): Boolean {
