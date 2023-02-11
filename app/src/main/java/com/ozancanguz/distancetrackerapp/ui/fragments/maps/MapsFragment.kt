@@ -2,6 +2,7 @@ package com.ozancanguz.distancetrackerapp.ui.fragments.maps
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ozancanguz.distancetrackerapp.R
 import com.ozancanguz.distancetrackerapp.databinding.FragmentMapsBinding
+import com.ozancanguz.distancetrackerapp.service.TrackerService
+import com.ozancanguz.distancetrackerapp.utils.Constants.ACTION_SERVICE_STOP
 import com.ozancanguz.distancetrackerapp.utils.Constants.GO
 
 import com.ozancanguz.distancetrackerapp.utils.Extension.disable
@@ -129,12 +132,26 @@ class MapsFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMyLocationButtonC
             }
 
             override fun onFinish() {
+                sendActionCommandToService(ACTION_SERVICE_STOP)
                 binding.timerTextView.hide()
             }
         }
         timer.start()
     }
+    private fun stopForegroundService() {
+        binding.startButton.disable()
+        sendActionCommandToService(ACTION_SERVICE_STOP)
+    }
 
+    private fun sendActionCommandToService(action: String) {
+        Intent(
+            requireContext(),
+            TrackerService::class.java
+        ).apply {
+            this.action = action
+            requireContext().startService(this)
+        }
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

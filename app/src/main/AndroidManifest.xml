@@ -4,6 +4,8 @@
 
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission-sdk-23 android:name="android.permission.ACCESS_BACKGROUND_LOCATION"></uses-permission-sdk-23>
+  
+  <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE"></uses-permission-sdk-23>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DistanceTrackerApp"
+
         tools:targetApi="31">
+        <service android:name=".service.TrackerService"
+            android:foregroundServiceType="location"
+            android:exported="false"
+            ></service>
 
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
